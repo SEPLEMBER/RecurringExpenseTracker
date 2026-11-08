@@ -24,6 +24,17 @@ android {
         }
     }
 
+    // --- ДОБАВЛЕНО: Сборка только под arm64-v8a ---
+    splits {
+        abi {
+            isEnable = true
+            reset()
+            include("arm64-v8a")
+            isUniversalApk = false
+        }
+    }
+    // ------------------------------------------------
+
     signingConfigs {
         create("release") {
             storeFile = file("keystore/android_keystore.jks")
@@ -41,6 +52,7 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro",
             )
+            // Отличная логика: если нет переменных окружения CI, используем debug подпись
             signingConfig = signingConfigs.getByName(if (runsCIReleaseBuild) "release" else "debug")
         }
     }
@@ -66,15 +78,22 @@ android {
     }
 }
 
+// --- ИЗМЕНЕНО: Добавлен суффикс ABI к имени файла для удобного поиска в CI ---
 androidComponents {
     onVariants(selector().withBuildType("release")) { variant ->
         variant.outputs.forEach { variantOutput ->
             if (variantOutput is com.android.build.api.variant.impl.VariantOutputImpl) {
-                variantOutput.outputFileName.set("${rootProject.name}_${variant.outputs.first().versionName.get()}.apk")
+                val abi = variantOutput.filters.find { 
+                    it.filterType == com.android.build.api.variant.FilterConfiguration.FilterType.ABI 
+                }?.identifier
+                val abiSuffix = abi?.let { "-$it" }.orEmpty()
+                
+                variantOutput.outputFileName.set("${rootProject.name}_${variant.versionName.get()}${abiSuffix}.apk")
             }
         }
     }
 }
+// ----------------------------------------------------------------------------
 
 dependencies {
     implementation(project(":shared"))
