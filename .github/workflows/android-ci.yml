@@ -18,13 +18,12 @@ jobs:
       uses: actions/setup-java@v4
       with:
         distribution: 'temurin'
-        java-version: '21' # Соответствует JavaVersion.VERSION_21 в build.gradle.kts
+        java-version: '21'
 
     - name: Setup Gradle
       uses: gradle/actions/setup-gradle@v4
 
     - name: Make gradlew executable
-      # Страховка от ошибки "Permission denied", если файл закоммичен без прав на выполнение
       run: chmod +x gradlew
 
     - name: Build Release APK
@@ -39,7 +38,6 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
         name: expensetracker-release-arm64-v8a
-        # Путь ищет файл именно с суффиксом -arm64-v8a, который мы добавили в build.gradle.kts
         path: app/build/outputs/apk/release/*arm64-v8a.apk
-        retention-days: 2
+        retention-days: 7
         if-no-files-found: error
