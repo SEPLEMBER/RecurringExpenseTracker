@@ -1,7 +1,7 @@
 <p align="center"><img src="fastlane/metadata/android/en-US/images/icon.png" width="150"></p> 
 <h2 align="center"><b>Recurring Expense Tracker</b></h2>
 <h4 align="center">A Material You recurring expense tracker, allowing you to keep track of your monthly spending.
-</h4>
+</h4> 
 
 [![GitHub releases](https://img.shields.io/github/release/DennisBauer/RecurringExpenseTracker?style=for-the-badge)](https://github.com/DennisBauer/RecurringExpenseTracker/releases/latest)
 [![GitHub issues](https://img.shields.io/github/issues/DennisBauer/RecurringExpenseTracker?style=for-the-badge)](https://github.com/DennisBauer/RecurringExpenseTracker/issues)
