@@ -9,6 +9,7 @@ import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
 import android.util.Log
+import android.view.WindowManager.LayoutParams.FLAG_SECURE // <-- ДОБАВЛЕНО: импорт флага безопасности
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.compose.setContent
@@ -98,6 +99,9 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         enableEdgeToEdge()
         super.onCreate(savedInstanceState)
+
+        // <-- ДОБАВЛЕНО: Защита от скриншотов и скрытие содержимого в меню недавних приложений
+        window.addFlags(FLAG_SECURE)
 
         lifecycleScope.launch {
             biometricPromptManager.promptResult.collectLatest {
