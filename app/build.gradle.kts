@@ -78,7 +78,7 @@ android {
     }
 }
 
-// --- ИЗМЕНЕНО: Добавлен суффикс ABI к имени файла для удобного поиска в CI ---
+// --- ИСПРАВЛЕНО: Безопасное получение versionName и добавление суффикса ABI ---
 androidComponents {
     onVariants(selector().withBuildType("release")) { variant ->
         variant.outputs.forEach { variantOutput ->
@@ -88,7 +88,9 @@ androidComponents {
                 }?.identifier
                 val abiSuffix = abi?.let { "-$it" }.orEmpty()
                 
-                variantOutput.outputFileName.set("${rootProject.name}_${variant.versionName.get()}${abiSuffix}.apk")
+                // Используем versionName из outputs с безопасным fallback, чтобы избежать ошибок компиляции в разных версиях AGP
+                val vName = variant.outputs.first().versionName.getOrElse("release")
+                variantOutput.outputFileName.set("${rootProject.name}_${vName}${abiSuffix}.apk")
             }
         }
     }
